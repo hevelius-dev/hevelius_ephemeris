@@ -46,6 +46,15 @@ This package contains or uses third-party data:
   Hipparcos reduction", A&A 474, 653 (2007) and the Washington Double
   Star Catalog, B. D. Mason et al., AJ 122, 3466 (2001); further
   references per value in data/stars/jasne_gwiazdy.csv.
+  Hipparcos values: Credit: ESA. ESA distributes the Hipparcos and Tycho
+  Catalogues under the CC BY-NC 3.0 IGO licence
+  (https://creativecommons.org/licenses/by-nc/3.0/igo/); commercial use
+  requires ESA's prior authorisation (data.licences@esa.int,
+  https://www.cosmos.esa.int/web/esdc/terms-and-conditions). Authorisation
+  covering this package was requested on 3 November 2026 and is pending.
+  If it is not granted, these values will be replaced in a later release
+  by values from a source without this restriction. No values from Gaia
+  are included.
 
 - Star names: IAU Catalog of Star Names, IAU Working Group on Star Names
   (WGSN), https://www.iau.org/public/themes/naming_stars/, licensed under

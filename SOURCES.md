@@ -137,7 +137,7 @@ najmniejsza w latach 1950–2049.
 
 | element | plik | źródło |
 |---|---|---|
-| Położenie ICRS (epoka J2000), ruch własny, paralaksa, prędkość radialna, jasność V – 22 jasne i znane gwiazdy, dla każdej wartości bibcode publikacji | `data/stars/jasne_gwiazdy.csv` (wybór z pełnego katalogu budowanego przez `tool/build_fixed_stars.dart`) | baza SIMBAD, CDS Strasburg, https://simbad.cds.unistra.fr/ (pobrane 2026-10-31); M. Wenger i in., „The SIMBAD astronomical database”, Astron. Astrophys. Suppl. 143, 9 (2000). Wartości pochodzą z katalogów: F. van Leeuwen, „Validation of the new Hipparcos reduction”, Astron. Astrophys. 474, 653 (2007) – 21 gwiazd; B. D. Mason i in., Washington Double Star Catalog, Astron. J. 122, 3466 (2001) – położenie α Cen; prędkości radialne i jasności – publikacje podane w kolumnach bib_*. Celowo bez wartości z Gaia (licencja CC BY-NC 3.0 IGO wyklucza użycie komercyjne bez zgody ESA) |
+| Położenie ICRS (epoka J2000), ruch własny, paralaksa, prędkość radialna, jasność V – 22 jasne i znane gwiazdy, dla każdej wartości bibcode publikacji | `data/stars/jasne_gwiazdy.csv` (wybór z pełnego katalogu budowanego przez `tool/build_fixed_stars.dart`) | baza SIMBAD, CDS Strasburg, https://simbad.cds.unistra.fr/ (pobrane 2026-10-31); M. Wenger i in., „The SIMBAD astronomical database”, Astron. Astrophys. Suppl. 143, 9 (2000). Wartości pochodzą z katalogów: F. van Leeuwen, „Validation of the new Hipparcos reduction”, Astron. Astrophys. 474, 653 (2007) – 21 gwiazd; B. D. Mason i in., Washington Double Star Catalog, Astron. J. 122, 3466 (2001) – położenie α Cen; prędkości radialne i jasności – publikacje podane w kolumnach bib_*. Bez wartości z Gaia. Wartości z Hipparcosa (21 gwiazd) – katalog ESA na licencji CC BY-NC 3.0 IGO: o zgodę na użycie komercyjne wystąpiono do ESA 3.11.2026, czekamy na odpowiedź (zob. niżej i NOTICE) |
 
 | element | plik | źródło |
 |---|---|---|
@@ -337,11 +337,19 @@ DO SPRAWDZENIA przez prawnika (zwłaszcza pozycje oznaczone „ryzyko”).
 | Nutacja IAU 2000A i równanie równonocy, tabele 5.3a, 5.3b i 5.2e IERS (`data/iers/`, `nutation_data.dart`) | tak | IERS Conventions (2010), IERS TN 36, © Verlag des Bundesamts für Kartographie und Geodäsie (2010); brak jawnej licencji na tabele. Współczynniki to model przyjęty przez IAU (rezolucje 2000 B1.6 i 2006 B1), powszechnie redystrybuowany (np. w bibliotece ERFA na licencji BSD); niskie ryzyko, wymagane cytowanie |
 | Efemerydy JPL DE440/DE440s/DE441/DE442, testpo.440/441/442 | nie (pobiera `tool/download_jpl.dart`) | JPL nie podaje licencji ani warunków; JPL prowadzi Caltech, więc nie są to automatycznie dzieła rządu USA. JPL prosi o cytowanie (Park i in. 2021). Aplikacja, która dołącza pliki, powinna mieć pisemne potwierdzenie z JPL SSD (kontakt na stronie https://ssd.jpl.nasa.gov/planets/eph_export.html) |
 | JPL Horizons (`test/reduction/horizons_reference.csv`, `horizons_topocentric.csv`, `tool/build_small_bodies.dart`) | tylko małe dane testowe | jak wyżej – bez formalnej licencji; cytowanie usługi |
-| Gwiazdy: SIMBAD (`data/stars/jasne_gwiazdy.csv`) | tak | warunki CDS (https://cds.unistra.fr/legals/): zbiory danych z informacją publiczną na Licence Ouverte, ODbL albo CC-BY; obowiązkowe cytowanie „CDS/SIMBAD” i podziękowanie. Zakaz użytku komercyjnego bez zgody dotyczy logotypów CDS/SIMBAD, nie danych. Wartości z Hipparcosa (van Leeuwen 2007) i WDS (USNO) – bez Gaia |
+| Gwiazdy: SIMBAD (`data/stars/jasne_gwiazdy.csv`) | tak | warunki CDS (https://cds.unistra.fr/legals/): zbiory danych z informacją publiczną na Licence Ouverte, ODbL albo CC-BY; obowiązkowe cytowanie „CDS/SIMBAD” i podziękowanie. Zakaz użytku komercyjnego bez zgody dotyczy logotypów CDS/SIMBAD, nie danych. Wartości z Hipparcosa (van Leeuwen 2007) – licencja ESA, zob. niżej; WDS (USNO); bez Gaia |
 | Przykłady z J. Meeus, Astronomical Algorithms; wartości z NASA/JPL Horizons | tylko w testach | pojedyncze wartości liczbowe jako dane kontrolne, z cytowaniem; tekstu książki nie kopiujemy |
 | Kanon zaćmień NASA (Espenak, Meeus) i kontakty z kart LEplot (Espenak), wartości w `test/events/eclipses_test.dart`; elementy Bessela NASA (Espenak) w `test/events/local_eclipse_test.dart` | tylko w testach | dzieło NASA GSFC – public domain; podziękowanie: „Eclipse Predictions by Fred Espenak, NASA's GSFC” |
 
-Gaia (ESA): dane na licencji CC BY-NC 3.0 IGO; użycie komercyjne wymaga
-wcześniejszej zgody ESA (data.licences@esa.int,
-https://www.cosmos.esa.int/web/esdc/terms-and-conditions). Dlatego
-w tym pakiecie nie ma wartości z Gaia.
+Gaia, Hipparcos i Tycho (ESA): dane na licencji CC BY-NC 3.0 IGO
+(https://www.cosmos.esa.int/web/gaia-users/license,
+https://www.cosmos.esa.int/web/hipparcos/catalogues); każde użycie
+komercyjne, także pośrednio przynoszące zysk, wymaga wcześniejszej zgody
+ESA (data.licences@esa.int,
+https://www.cosmos.esa.int/web/esdc/terms-and-conditions). W pakiecie nie
+ma wartości z Gaia. Są wartości z Hipparcosa (nowa redukcja, van Leeuwen
+2007) dla 21 gwiazd w `data/stars/jasne_gwiazdy.csv` – 3.11.2026
+wystąpiliśmy do ESA o zgodę obejmującą ten pakiet i czekamy na odpowiedź.
+Jeśli ESA jej nie udzieli, w kolejnej wersji zastąpimy je wartościami ze
+źródła bez tego ograniczenia (np. Bright Star Catalogue, Hoffleit i Warren
+1991 – dokładność ok. 1″).

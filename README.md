@@ -41,7 +41,8 @@ after Johannes Hevelius, the 17th-century astronomer of Gdańsk.
   declination (`equatorialToHorizontal`); optional refraction for given
   pressure and temperature. Agrees with JPL Horizons to 0.7″.
 - Fixed stars: proper motion, annual parallax, deflection and aberration;
-  22 bright stars included.
+  22 bright stars included (Hipparcos values – ESA licence with a
+  non-commercial clause, authorisation requested; see NOTICE).
 - Reading and writing JPL SPK files (types 2 and 3).
 
 Accuracy: astrometric positions agree with NASA/JPL Horizons to 0.0001″

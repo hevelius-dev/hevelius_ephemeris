@@ -5,8 +5,10 @@
 # ra, dec: ICRS, epoka J2000 (stopnie); pmra = μα·cos δ, pmdec (mas/rok); plx (mas); rv (km/s); v (mag);
 # bib_*: publikacja (bibcode ADS), z której pochodzi wartość.
 # Wybór 22 jasnych i znanych gwiazd; dane z bazy SIMBAD (tool/build_fixed_stars.dart),
-# tylko z katalogów na otwartych licencjach
-# (bez wartości z Gaia, których licencja wyklucza użycie komercyjne).
+# bez wartości z Gaia. Położenie, ruch własny i paralaksa 21 gwiazd: Hipparcos,
+# nowa redukcja (van Leeuwen 2007) – katalog ESA na licencji CC BY-NC 3.0 IGO
+# (Credit: ESA); 3.11.2026 wystąpiliśmy do ESA o zgodę na użycie komercyjne
+# i czekamy na odpowiedź (zob. NOTICE). α Cen: Washington Double Star Catalog.
 # Nazwy: IAU Catalog of Star Names (WGSN), CC BY 4.0, https://www.iau.org/public/themes/naming_stars/;
 # oznaczenia w zapisie IAU (Bayer, skróty greckie jak w SIMBAD).
 nazwa,oznaczenie,simbad,typ,ra,dec,pmra,pmdec,plx,rv,v,bib_coo,bib_pm,bib_plx,bib_rv,zrodlo_nazwy

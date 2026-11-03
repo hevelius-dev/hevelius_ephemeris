@@ -1,3 +1,10 @@
+## 0.1.1
+
+- Corrected licence information for the bundled bright stars: their
+  Hipparcos values come from an ESA catalogue distributed under
+  CC BY-NC 3.0 IGO. Authorisation for commercial use has been requested
+  from ESA and is pending (see NOTICE). No code changes.
+
 ## 0.1.0
 
 - Package skeleton, J2000 and Julian century constants.
