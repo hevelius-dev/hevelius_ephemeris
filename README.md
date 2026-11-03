@@ -45,11 +45,11 @@ after Johannes Hevelius, the 17th-century astronomer of Gdańsk.
   non-commercial clause, authorisation requested; see NOTICE).
 - Reading and writing JPL SPK files (types 2 and 3).
 
-Accuracy: astrometric positions agree with NASA/JPL Horizons to 0.0001″
-(test chart, 15 bodies); apparent ecliptic positions differ only by the
-known offset between the IAU 1976/1980 precession–nutation models used by
-Horizons and the IAU 2006/2000A models used here (0.3″ in 1879); details
-in SOURCES.md.
+Accuracy: astrometric positions agree with NASA/JPL Horizons to better
+than 0.01″, typically 0.0001″ (75 comparisons, 15 bodies, 1849–2150);
+apparent ecliptic positions differ only by the known offset between the
+IAU 1976/1980 precession–nutation models used by Horizons and the
+IAU 2006/2000A models used here (0.3″ in 1879); details in SOURCES.md.
 
 ## Data
 
@@ -81,7 +81,7 @@ import 'package:hevelius_ephemeris/spk_io.dart';
 
 void main() {
   final ephemeris = SpkEphemeris([openSpkFile('data/jpl/de440s.bsp')]);
-  // Albert Einstein: 14 March 1879, 11:30 local mean time in Ulm.
+  // Ulm, 14 March 1879, 11:30 local mean time (10:50 UT).
   final jdUt = julianDay(1879, 3, 14, hour: 10, minute: 50);
   final jdTT = julianDayTT(jdUt);
 

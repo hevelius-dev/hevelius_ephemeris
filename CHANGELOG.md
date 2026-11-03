@@ -3,7 +3,9 @@
 - Corrected licence information for the bundled bright stars: their
   Hipparcos values come from an ESA catalogue distributed under
   CC BY-NC 3.0 IGO. Authorisation for commercial use has been requested
-  from ESA and is pending (see NOTICE). No code changes.
+  from ESA and is pending (see NOTICE).
+- README: accuracy against JPL Horizons over all 75 comparisons; the
+  example chart is described by date and place only. No code changes.
 
 ## 0.1.0
 

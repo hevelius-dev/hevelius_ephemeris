@@ -1,8 +1,8 @@
 // Copyright 2026 Mirosław Kozłowski
 // SPDX-License-Identifier: Apache-2.0
 
-// Positions for a horoscope: Albert Einstein, 14 March 1879, 11:30 local
-// mean time in Ulm (10:50 UT), 48°24′ N, 10°00′ E.
+// Positions for a horoscope: Ulm (48°24′ N, 10°00′ E), 14 March 1879,
+// 11:30 local mean time (10:50 UT).
 //
 // Download the JPL file first:
 //
