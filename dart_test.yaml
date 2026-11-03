@@ -1,0 +1,13 @@
+# Testy na dużych plikach JPL (DE441 3,3 GB, DE442) są domyślnie pomijane
+# – z widocznym powodem w wyniku. Uruchomienie:
+#   dart run tool/download_jpl.dart --de441
+#   dart test -P duze-pliki
+tags:
+  duze-pliki:
+    skip: "duże pliki JPL – uruchom: dart test -P duze-pliki"
+
+presets:
+  duze-pliki:
+    tags:
+      duze-pliki:
+        skip: false

@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Hevelius Ephemeris"
+abstract: "Ephemeris engine in pure Dart: NASA JPL ephemerides, astronomical reductions written from scratch, eclipses and astronomical events."
+type: software
+authors:
+  - family-names: "Kozłowski"
+    given-names: "Mirosław"
+version: 0.1.0
+license: Apache-2.0
+url: "https://hevelius.dev"
+keywords:
+  - ephemeris
+  - astronomy
+  - dart
+  - flutter

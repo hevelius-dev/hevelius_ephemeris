@@ -1,0 +1,52 @@
+Hevelius Ephemeris
+Copyright 2026 Mirosław Kozłowski
+
+The calculation code in this package was written from scratch from
+published scientific sources listed in SOURCES.md. It contains no code
+from Swiss Ephemeris, SOFA or ERFA.
+
+This package contains or uses third-party data:
+
+- ΔT since 1973: U.S. Naval Observatory, https://maia.usno.navy.mil/
+  (U.S. Government work, public domain).
+
+- ΔT from −720 to 1973: Table S15.2020 from L. V. Morrison,
+  F. R. Stephenson, C. Y. Hohenkerk, M. Zawilski, "Addendum 2020 to
+  'Measurement of the Earth's rotation: 720 BC to AD 2015'",
+  Proc. R. Soc. A 477 (2021), doi:10.1098/rspa.2020.0776, and
+  F. R. Stephenson, L. V. Morrison, C. Y. Hohenkerk, "Measurement of the
+  Earth's rotation: 720 BC to AD 2015", Proc. R. Soc. A 472 (2016),
+  doi:10.1098/rspa.2016.0404. The table is part of the electronic
+  supplementary material "Tables S2, S3 and S5 from Addendum 2020 to
+  'Measurement of the Earth's rotation: 720 BC to AD 2015'", figshare,
+  doi:10.6084/m9.figshare.13885863.v2, licensed under CC BY 4.0
+  (https://creativecommons.org/licenses/by/4.0/). Used unmodified;
+  converted to Dart constants in lib/src/time/delta_t_data.dart.
+
+- Nutation IAU 2000A and the equation of the equinoxes (tables 5.3a,
+  5.3b and 5.2e): IERS Conventions (2010),
+  G. Petit and B. Luzum (eds.), IERS Technical Note No. 36, Verlag des
+  Bundesamts für Kartographie und Geodäsie, Frankfurt am Main (2010).
+
+- Planetary and lunar ephemerides DE440/DE441 (downloaded, not included):
+  R. S. Park, W. M. Folkner, J. G. Williams, D. H. Boggs, "The JPL
+  Planetary and Lunar Ephemerides DE440 and DE441", Astron. J. 161:105
+  (2021). Courtesy of NASA/JPL-Caltech, Solar System Dynamics,
+  https://ssd.jpl.nasa.gov/. Small-body data: JPL Horizons.
+
+- Eclipse test data: "Eclipse Predictions by Fred Espenak, NASA's GSFC"
+  (F. Espenak and J. Meeus, Five Millennium Canon of Solar Eclipses and
+  of Lunar Eclipses, https://eclipse.gsfc.nasa.gov/). Earth's shadow
+  enlargement formulas after the same source.
+
+- Fixed stars: This research has made use of the SIMBAD database, CDS,
+  Strasbourg Astronomical Observatory, France (M. Wenger et al.,
+  "The SIMBAD astronomical database", A&AS 143, 9, 2000). Source:
+  CDS/SIMBAD. Values from F. van Leeuwen, "Validation of the new
+  Hipparcos reduction", A&A 474, 653 (2007) and the Washington Double
+  Star Catalog, B. D. Mason et al., AJ 122, 3466 (2001); further
+  references per value in data/stars/jasne_gwiazdy.csv.
+
+- Star names: IAU Catalog of Star Names, IAU Working Group on Star Names
+  (WGSN), https://www.iau.org/public/themes/naming_stars/, licensed under
+  CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/).
