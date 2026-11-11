@@ -1,3 +1,12 @@
+## 0.1.2
+
+- Faster nutation: `nutation()` now interpolates the IAU 2000A series
+  from whole days TT (Lagrange, 12 nodes); it differs from the series by
+  less than 1 µas (0.000001″). The series itself is available as
+  `nutationIau2000A()` and is 2.3× faster (no sine and cosine per term).
+  Event searches (phases, ingresses, stations, eclipses, risings and
+  settings) are 3–30× faster; results change by less than 1 µas.
+
 ## 0.1.1
 
 - Corrected licence information for the bundled bright stars: their

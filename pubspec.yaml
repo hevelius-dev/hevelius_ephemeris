@@ -2,7 +2,7 @@ name: hevelius_ephemeris
 description: >-
   Ephemeris engine in pure Dart: NASA JPL ephemerides, reductions written
   from scratch, eclipses, rise and set, lunar points, ascendant, fixed stars.
-version: 0.1.1
+version: 0.1.2
 homepage: https://hevelius.dev
 repository: https://github.com/hevelius-dev/hevelius_ephemeris
 
