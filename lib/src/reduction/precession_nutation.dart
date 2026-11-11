@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import 'dart:math' as math;
+import 'dart:typed_data';
 
 import '../math/vector3.dart';
 import '../time/epochs.dart';
@@ -225,20 +226,92 @@ List<double> _fundamentalArguments(double t) {
 }
 
 /// Suma szeregu nutacji (radiany); [table] jak w nutation_data.dart.
-double _series(List<int> table, List<double> args, double t) {
-  var sum = 0.0;
-  for (var i = 0; i < table.length; i += 17) {
-    var arg = 0.0;
-    for (var k = 0; k < 14; k++) {
-      final n = table[i + 3 + k];
-      if (n != 0) arg += n * args[k];
+double _series(List<int> table, List<double> args, double t) =>
+    _compiled(table).sum(args, t);
+
+/// Szereg przygotowany do szybkiego sumowania: tylko niezerowe mnożniki
+/// argumentów, współczynniki jako double. Wynik ten sam co z tabeli.
+class _CompiledSeries {
+  /// Na wyraz: potęga t, współczynnik przy sinusie, przy cosinusie.
+  final Float64List coefficients;
+
+  /// Na wyraz: początek jego par (indeks w _cos/_sin, znak) w [pairs].
+  final Int32List starts;
+  final Int32List pairs;
+
+  _CompiledSeries(this.coefficients, this.starts, this.pairs);
+
+  factory _CompiledSeries.of(List<int> table) {
+    final terms = table.length ~/ 17;
+    final coefficients = Float64List(terms * 3);
+    final starts = Int32List(terms + 1);
+    final pairs = <int>[];
+    for (var i = 0; i < terms; i++) {
+      for (var c = 0; c < 3; c++) {
+        coefficients[i * 3 + c] = table[i * 17 + c].toDouble();
+      }
+      starts[i] = pairs.length;
+      for (var k = 0; k < 14; k++) {
+        final n = table[i * 17 + 3 + k];
+        if (n.abs() > _maxMultiplier) {
+          throw StateError('Nutation multiplier $n exceeds $_maxMultiplier');
+        }
+        // Gotowy indeks do _cos/_sin i znak sinusa.
+        if (n != 0) pairs.addAll([k * (_maxMultiplier + 1) + n.abs(), n.sign]);
+      }
     }
-    final term = table[i + 1] * math.sin(arg) + table[i + 2] * math.cos(arg);
-    sum += table[i] == 0 ? term : term * t;
+    starts[terms] = pairs.length;
+    return _CompiledSeries(coefficients, starts, Int32List.fromList(pairs));
   }
-  // Współczynniki są w 0,01 µas = 1e-8″.
-  return sum * 1e-8 * arcsecond;
+
+  double sum(List<double> args, double t) {
+    // cos(n·aₖ) i sin(n·aₖ) dla n = 0 … _maxMultiplier – z rekurencji
+    // e^{i(n+1)a} = e^{ina}·e^{ia}; dla ujemnych n sinus zmienia znak.
+    const m = _maxMultiplier + 1;
+    for (var k = 0; k < 14; k++) {
+      final c1 = math.cos(args[k]), s1 = math.sin(args[k]);
+      var c = 1.0, s = 0.0;
+      for (var n = 0; n < m; n++) {
+        _cos[k * m + n] = c;
+        _sin[k * m + n] = s;
+        final cNext = c * c1 - s * s1;
+        s = s * c1 + c * s1;
+        c = cNext;
+      }
+    }
+    var sum0 = 0.0, sum1 = 0.0;
+    final terms = starts.length - 1;
+    for (var i = 0; i < terms; i++) {
+      // e^{i·arg} jako iloczyn czynników e^{i·n·aₖ}
+      var re = 1.0, im = 0.0;
+      for (var p = starts[i]; p < starts[i + 1]; p += 2) {
+        final index = pairs[p];
+        final c = _cos[index], s = pairs[p + 1] * _sin[index];
+        final reNext = re * c - im * s;
+        im = im * c + re * s;
+        re = reNext;
+      }
+      final term = coefficients[i * 3 + 1] * im + coefficients[i * 3 + 2] * re;
+      if (coefficients[i * 3] == 0) {
+        sum0 += term;
+      } else {
+        sum1 += term;
+      }
+    }
+    // Współczynniki są w 0,01 µas = 1e-8″.
+    return (sum0 + sum1 * t) * 1e-8 * arcsecond;
+  }
 }
+
+/// Największy |mnożnik| argumentu w tabelach IERS (21 – długość Wenus).
+const int _maxMultiplier = 21;
+final Float64List _cos = Float64List(14 * (_maxMultiplier + 1));
+final Float64List _sin = Float64List(14 * (_maxMultiplier + 1));
+
+final Map<List<int>, _CompiledSeries> _compiledTables = Map.identity();
+
+_CompiledSeries _compiled(List<int> table) =>
+    _compiledTables.putIfAbsent(table, () => _CompiledSeries.of(table));
 
 /// Wielomian c₀ + c₁·t + c₂·t² + … (schemat Hornera).
 double _poly(double t, List<double> c) {
