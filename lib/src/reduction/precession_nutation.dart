@@ -43,35 +43,73 @@ double meanObliquityIau2006(double t) =>
     ]) *
     arcsecond;
 
-/// Nutation in longitude Δψ and in obliquity Δε (radians), tables 5.3a
-/// and 5.3b.
+/// Nutation in longitude Δψ and in obliquity Δε (radians): the IAU 2000A
+/// series ([nutationIau2000A]) interpolated from values at whole Julian
+/// days.
 ///
-/// The series have about 1400 terms, and one chart asks for nutation at
-/// the same few moments dozens of times (each body, speeds at t ± step,
-/// sidereal time) – hence a cache of recent results.
+/// The series have about 1400 terms, and searches for events ask for
+/// nutation at thousands of moments. Lagrange interpolation of degree 11
+/// from the 12 nearest whole days TT differs from the series by less
+/// than 1 µas (0.000001″) – tested at random dates – and costs a small
+/// fraction of the series. Values at whole days are kept in a bounded
+/// cache.
 ({double longitude, double obliquity}) nutation(double t) {
-  for (var i = 0; i < _nutationCacheSize; i++) {
-    if (_nutationCacheT[i] == t) return _nutationCacheValue[i]!;
+  final x = t * daysPerJulianCentury + (j2000 - _nutationGridOrigin);
+  final k0 = x.floor() - _nutationNodes ~/ 2 + 1;
+  var longitude = 0.0, obliquity = 0.0;
+  for (var i = 0; i < _nutationNodes; i++) {
+    var w = _lagrangeDenominators[i];
+    for (var j = 0; j < _nutationNodes; j++) {
+      if (j != i) w *= x - (k0 + j);
+    }
+    final node = _nutationNode(k0 + i);
+    longitude += w * node.longitude;
+    obliquity += w * node.obliquity;
   }
+  return (longitude: longitude, obliquity: obliquity);
+}
+
+/// Nutation in longitude Δψ and in obliquity Δε (radians) straight from
+/// the IAU 2000A series with the R06 adjustments, IERS Conventions
+/// (2010), tables 5.3a and 5.3b. [nutation] gives the same to better
+/// than 1 µas, much faster.
+({double longitude, double obliquity}) nutationIau2000A(double t) {
   final args = _fundamentalArguments(t);
-  final value = (
+  return (
     longitude: _series(nutationInLongitude, args, t),
     obliquity: _series(nutationInObliquity, args, t),
   );
-  _nutationCacheT[_nutationCacheNext] = t;
-  _nutationCacheValue[_nutationCacheNext] = value;
-  _nutationCacheNext = (_nutationCacheNext + 1) % _nutationCacheSize;
-  return value;
 }
 
-const int _nutationCacheSize = 8;
-final List<double> _nutationCacheT = List.filled(
-  _nutationCacheSize,
-  double.nan,
-);
-final List<({double longitude, double obliquity})?> _nutationCacheValue =
-    List.filled(_nutationCacheSize, null);
-var _nutationCacheNext = 0;
+// Siatka węzłów interpolacji: pełne dni juliańskie TT (k = JD − origin),
+// 12 węzłów wokół chwili. Pomiar (5000 losowych dat, lata −12 900 …
+// +12 000): krok 1 d i 12 węzłów – maks. 0,66 µas; 8 węzłów – 10 µas.
+const int _nutationNodes = 12;
+const double _nutationGridOrigin = 2451545.0;
+
+/// 1 / ∏(i − j) dla j ≠ i – stałe mianowniki wag Lagrange'a.
+final List<double> _lagrangeDenominators = [
+  for (var i = 0; i < _nutationNodes; i++)
+    1 /
+        [
+          for (var j = 0; j < _nutationNodes; j++)
+            if (j != i) (i - j).toDouble(),
+        ].fold(1.0, (a, b) => a * b),
+];
+
+final Map<int, ({double longitude, double obliquity})> _nutationCache = {};
+
+/// Ok. 30 lat węzłów (ok. 1 MB); po przekroczeniu pamięć zaczyna od nowa.
+const int _nutationCacheLimit = 11000;
+
+({double longitude, double obliquity}) _nutationNode(int k) {
+  final cached = _nutationCache[k];
+  if (cached != null) return cached;
+  if (_nutationCache.length >= _nutationCacheLimit) _nutationCache.clear();
+  return _nutationCache[k] = nutationIau2000A(
+    (k + _nutationGridOrigin - j2000) / daysPerJulianCentury,
+  );
+}
 
 /// Fukushima–Williams angles (radians), eq. 5.40: γ̄, φ̄, ψ̄.
 ///

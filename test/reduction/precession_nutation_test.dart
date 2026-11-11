@@ -80,17 +80,31 @@ void main() {
     expect(latitude, closeTo(90 - 84381.406 / 3600, 1e-5));
   });
 
-  test('zapamiętane wyniki nutacji zgadzają się z policzonymi', () {
-    // Każde t liczone pierwszy raz jest liczone od nowa; potem pytamy
-    // na przemian o świeże i dawne chwile (więcej niż mieści pamięć).
-    final ts = [for (var i = 0; i < 20; i++) 0.2371 + i * 1e-4];
-    final fresh = [for (final t in ts) nutation(t)];
-    for (var round = 0; round < 3; round++) {
-      for (var i = 0; i < ts.length; i++) {
-        final j = (i * 7 + round) % ts.length;
-        expect(nutation(ts[j]), fresh[j]);
-        expect(nutation(ts[j]), fresh[j]);
-      }
+  test('nutacja z interpolacji = szereg IAU 2000A do 1 µas', () {
+    // Losowe daty w zakresie DE442 i daleko poza nim; w tym chwile tuż
+    // przy pełnych dniach (węzłach siatki).
+    const uas = arcsecond / 1e6;
+    final rnd = math.Random(2026);
+    final ts = [
+      for (var i = 0; i < 3000; i++) (rnd.nextDouble() * 11 - 6.5),
+      for (var i = 0; i < 300; i++) (rnd.nextDouble() * 300 - 150),
+      for (var i = 0; i < 100; i++)
+        ((2461000.5 + i) - 2451545.0 + (i.isEven ? 1e-9 : -1e-9)) / 36525,
+    ];
+    for (final t in ts) {
+      final fast = nutation(t), series = nutationIau2000A(t);
+      expect(fast.longitude, closeTo(series.longitude, uas), reason: '$t');
+      expect(fast.obliquity, closeTo(series.obliquity, uas), reason: '$t');
+    }
+  });
+
+  test('nutacja w pełnym dniu TT = wartość szeregu', () {
+    for (final jd in [2451545.0, 2461356.0, 2287000.0, -1000000.0]) {
+      final t = (jd - 2451545.0) / 36525;
+      expect(
+        nutation(t).longitude,
+        closeTo(nutationIau2000A(t).longitude, 1e-15),
+      );
     }
   });
 }
